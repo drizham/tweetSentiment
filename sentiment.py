@@ -23,7 +23,7 @@ from config import *
 # create instance of elasticsearch
 es = Elasticsearch()
 
-indexName = "sentiment_time"
+indexName = "test_time"
 
 class TweetStreamListener(StreamListener):
 
@@ -56,11 +56,13 @@ class TweetStreamListener(StreamListener):
                  doc_type="test-type",
                  body={"author": dict_data["user"]["screen_name"],
                        "date": dict_data["created_at"], # unfortunately this gets stored as a string
-                       "timestamp": float(dict_data["timestamp_ms"]), # double not recognised as date 
+                       #"timestamp": float(dict_data["timestamp_ms"]), # double not recognised as date 
+                       "timestamp": dict_data["timestamp_ms"],
                        "datetime": datetime.now(),
                        "message": dict_data["text"],
                        "polarity": tweet.sentiment.polarity,
                        "subjectivity": tweet.sentiment.subjectivity,
+                       # handle geo data
                        "sentiment": sentiment})
         return True
 

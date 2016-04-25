@@ -1,0 +1,21 @@
+Use the commands below directly in a terminal to map part of a tweet
+this allows date, datetime and timestamp all to be recognised in elastic search/ kibana as a date type
+
+curl -XPUT http://localhost:9200/test_time -d '
+{
+ "mappings" : {
+  "_default_": {
+    "properties": {
+      "date": { "type": "date", "format": "EE MMM d HH:mm:ss Z yyyy" },
+      "sentiment": { "type": "string" },
+      "subjectivity": {"type": "double"},
+      "author": {"type": "string"},
+      "message": {"type": "string"},
+      "polarity": {"type": "double"},
+      "timestamp": {"type": "date","format": "epoch_millis"},
+      "datetime": {"type": "date" }
+    }
+  }
+}
+}
+';
