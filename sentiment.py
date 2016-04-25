@@ -15,6 +15,7 @@ from tweepy import OAuthHandler
 from tweepy import Stream
 from textblob import TextBlob
 from elasticsearch import Elasticsearch
+from datetime import datetime
 
 # import twitter keys and tokens
 from config import *
@@ -22,6 +23,7 @@ from config import *
 # create instance of elasticsearch
 es = Elasticsearch()
 
+indexName = "sentiment_time"
 
 class TweetStreamListener(StreamListener):
 
@@ -30,15 +32,13 @@ class TweetStreamListener(StreamListener):
 
         # decode json
         dict_data = json.loads(data) # data is a json string
-
-        # uncomment below to print the json string
-        # print(data)
+        
+        # print(data) # to print the twitter json string
 
         # pass tweet into TextBlob
         tweet = TextBlob(dict_data["text"])
 
-        # output sentiment polarity
-        print (tweet.sentiment.polarity)
+        # print (tweet.sentiment.polarity) # output sentiment polarity
 
         # determine if sentiment is positive, negative, or neutral
         if tweet.sentiment.polarity < 0:
@@ -48,14 +48,16 @@ class TweetStreamListener(StreamListener):
         else:
             sentiment = "positive"
 
-        # output sentiment
-        print (sentiment)
+        # output polarity sentiment and tweet text
+        print (str(tweet.sentiment.polarity) + " " + sentiment + " " + dict_data["text"])
 
         # add text and sentiment info to elasticsearch
-        es.index(index="sentiment",
+        es.index(index=indexName,
                  doc_type="test-type",
                  body={"author": dict_data["user"]["screen_name"],
-                       "date": dict_data["created_at"],
+                       "date": dict_data["created_at"], # unfortunately this gets stored as a string
+                       "timestamp": float(dict_data["timestamp_ms"]), # double not recognised as date 
+                       "datetime": datetime.now(),
                        "message": dict_data["text"],
                        "polarity": tweet.sentiment.polarity,
                        "subjectivity": tweet.sentiment.subjectivity,
