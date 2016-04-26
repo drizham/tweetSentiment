@@ -23,7 +23,7 @@ from config import *
 # create instance of elasticsearch
 es = Elasticsearch()
 
-indexName = "test_time"
+indexName = "test_new_fields"
 
 class TweetStreamListener(StreamListener):
 
@@ -34,6 +34,7 @@ class TweetStreamListener(StreamListener):
         dict_data = json.loads(data) # data is a json string
         
         # print(data) # to print the twitter json string
+        print(dict_data)
 
         # pass tweet into TextBlob
         tweet = TextBlob(dict_data["text"])
@@ -56,6 +57,11 @@ class TweetStreamListener(StreamListener):
                  doc_type="test-type",
                  body={"author": dict_data["user"]["screen_name"],
                        "date": dict_data["created_at"], # unfortunately this gets stored as a string
+                       "location": dict_data["user"]["location"], # user location
+                       "followers": dict_data["user"]["followers_count"],
+                       "friends": dict_data["user"]["friends_count"],
+                       "time_zone": dict_data["user"]["time_zone"],
+                       "lang": dict_data["user"]["lang"],
                        #"timestamp": float(dict_data["timestamp_ms"]), # double not recognised as date 
                        "timestamp": dict_data["timestamp_ms"],
                        "datetime": datetime.now(),
@@ -63,6 +69,7 @@ class TweetStreamListener(StreamListener):
                        "polarity": tweet.sentiment.polarity,
                        "subjectivity": tweet.sentiment.subjectivity,
                        # handle geo data
+                       #"coordinates": dict_data[coordinates],
                        "sentiment": sentiment})
         return True
 
