@@ -35,6 +35,10 @@ With this command from within Elasticsearch's home folder:
  ./bin/plugin install lmenezes/elasticsearch-kopf/{2.0/v2.1.1}
 open http://localhost:9200/_plugin/kopf
 
+##### Timelion
+- Install Timelion from within Kibana with:
+./apps/kibana-4.5.0-darwin-x64/bin/kibana plugin -i kibana/timelion
+
 NOTES:
 Elastic search indices must only have lower case names.
 
@@ -48,6 +52,31 @@ https://realpython.com/blog/python/twitter-sentiment-python-docker-elasticsearch
 https://www.elastic.co/guide/en/kibana/3.0/using-kibana-for-the-first-time.html
 - Introduction to Kibana
 https://www.timroes.de/2015/02/07/kibana-4-tutorial-part-1-introduction/
+- Kibana Tutorials on YouTube https://www.youtube.com/watch?v=96og3aIgyrc&list=PLhLSfisesZIvA8ad1J2DSdLWnTPtzWSfI
 - Plotting a Line Chart
 http://stackoverflow.com/questions/30120199/how-to-create-value-over-time-line-chart-in-kibana-4
 - Getting Started https://www.elastic.co/guide/en/kibana/current/getting-started.html
+- Creating Pie Charts in Kibana 4 https://www.youtube.com/watch?v=Cjww_oug2E8
+- Timelion a Timeseries add on: https://www.elastic.co/blog/timelion-timeline
+
+##### Logstash
+- Getting started with Logstash
+https://kevinkirsche.com/2014/08/22/using-logstash-to-import-logfiles-from-a-directory/
+
+##### Elasticsearch Useful Commands
+
+##### Cluster Health
+curl -GET 'http://localhost:9200/_cluster/health'
+
+##### Add an Index
+create and index called blogs
+curl -XPUT 'http://localhost:9200/blogs/'
+
+##### Delete Indices
+curl -XDELETE 'http://localhost:9200/logstash*/'
+The example above deletes the logstash with the wild card *
+
+#### Notes
+_type = object
+_id = unique identifier
+
